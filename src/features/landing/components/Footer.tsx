@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2026 Roberto Díaz. All rights reserved.
+ * Licensed under the GNU General Public License v3.0. See LICENSE for details.
+ */
+
 import { useTranslation } from "react-i18next";
 import LogoCartAI from "../../../assets/logo-h.svg?react";
 
