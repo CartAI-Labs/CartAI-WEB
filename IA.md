@@ -49,3 +49,49 @@ src/
 ├── App.tsx                 # Inicializador de proveedores globales (Router)
 └── main.tsx                # Punto de entrada al DOM
 ```
+
+# Resumen de Estado Frontend: Cart•AI
+
+## 1. Diseño y Arquitectura Base
+
+- **Documentación:** Generado `cart-ai-diseno-arquitectura.md` con paleta estricta (`#f8f9fa`, `#0a192f`, `#e85d04`) y tipografía (Urbanist, Lato).
+- **Assets:** Estrategia SVG establecida para el logo mediante `vite-plugin-svgr` y limpieza automática de metadatos con `SVGO`.
+- **Estructura:** Implementación de Feature-Driven Development (FDD) en `src/features/landing/`.
+
+## 2. Componentes UI (Landing Page)
+
+Construidos e integrados los siguientes componentes puramente visuales:
+
+- `Navbar.tsx`: Navegación principal y selector de idioma.
+- `HeroSection.tsx`: Bloque de impacto principal.
+- `FeatureCard.tsx`: Componente atómico para iterar características.
+- `Footer.tsx`: Cierre estandarizado.
+- `LandingPage.tsx`: Orquestador principal que ensambla la vista.
+
+## 3. Internacionalización (i18n)
+
+- **Tecnología:** `react-i18next`.
+- **Configuración:** Creado motor de arranque en `config.ts` e inyectado en `main.tsx`.
+- **Diccionarios:** Generados `en.json` y `es.json` aislando todos los textos de la interfaz.
+- **Integración:** Refactorizados todos los componentes de la Landing Page para consumir el hook `useTranslation`.
+
+---
+
+## ⚠️ Estado Crítico y Siguientes Pasos
+
+La vista actual es **estática y no enrutable**. Es un callejón sin salida arquitectónico hasta que se aplique la capa de navegación.
+
+Acabar esto:
+
+## Motor de Estado Global
+
+- **Tecnología:** `zustand`.
+- **Implementación:** Creado `cartStore.ts` con tipado estricto (`Product`, `CartItem`) y métodos inmutables (`addItem`, `removeItem`, `clearCart`).
+- **Estado:** Conectado a `Navbar.tsx` para conteo reactivo.
+
+**Tareas para el próximo agente:**
+
+1. Instalar y configurar `react-router-dom` en `App.tsx`.
+2. Extraer `Navbar` y `Footer` a un `MainLayout.tsx` global para persistencia de estado.
+3. Crear vista `/catalog` para inyectar productos mock y validar el flujo real de Zustand.
+4. Conectar con el backend para LOGAR y CREAR usuarios
