@@ -307,7 +307,7 @@ export function ProfilePage() {
     <div className="min-h-[85vh] py-12 px-4 sm:px-6 lg:px-8 bg-slate-50/50 relative">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
         {/* Header decoration */}
-        <div className="bg-gradient-to-r from-[--color-brand-primary] to-slate-800 px-8 py-10 text-white relative">
+        <div className="bg-linear-to-r from-(--color-brand-primary) to-slate-800 px-8 py-10 text-white relative">
           <div className="absolute top-0 right-0 p-4 opacity-10">
             <UserIcon className="w-32 h-32" />
           </div>
@@ -325,7 +325,7 @@ export function ProfilePage() {
             onClick={() => setActiveTab("general")}
             className={`flex-1 py-4 text-center font-semibold text-sm transition-colors ${
               activeTab === "general" 
-                ? "text-[--color-brand-primary] border-b-2 border-[--color-brand-primary]" 
+                ? "text-(--color-brand-primary) border-b-2 border-(--color-brand-primary)" 
                 : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
             }`}
           >
@@ -335,7 +335,7 @@ export function ProfilePage() {
             onClick={() => setActiveTab("addresses")}
             className={`flex-1 py-4 text-center font-semibold text-sm transition-colors ${
               activeTab === "addresses" 
-                ? "text-[--color-brand-primary] border-b-2 border-[--color-brand-primary]" 
+                ? "text-(--color-brand-primary) border-b-2 border-(--color-brand-primary)" 
                 : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
             }`}
           >
@@ -386,7 +386,7 @@ export function ProfilePage() {
                   </div>
                   <label
                     htmlFor="avatar-input"
-                    className="absolute bottom-0 right-0 bg-[--color-brand-accent] text-white p-2 rounded-full cursor-pointer hover:bg-orange-600 transition-colors shadow-md flex items-center justify-center"
+                    className="absolute bottom-0 right-0 bg-(--color-brand-accent) text-white p-2 rounded-full cursor-pointer hover:bg-orange-600 transition-colors shadow-md flex items-center justify-center"
                   >
                     <Upload className="w-4 h-4" />
                     <input
@@ -456,7 +456,7 @@ export function ProfilePage() {
                     <input
                       type="text"
                       required
-                      className="appearance-none block w-full px-3 py-2.5 pl-10 border border-slate-300 placeholder-slate-400 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[--color-brand-accent] focus:border-transparent sm:text-sm bg-slate-50/50"
+                      className="appearance-none block w-full px-3 py-2.5 pl-10 border border-slate-300 placeholder-slate-400 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent sm:text-sm bg-slate-50/50"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                     />
@@ -473,7 +473,7 @@ export function ProfilePage() {
                     </div>
                     <input
                       type="text"
-                      className="appearance-none block w-full px-3 py-2.5 pl-10 border border-slate-300 placeholder-slate-400 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[--color-brand-accent] focus:border-transparent sm:text-sm bg-slate-50/50"
+                      className="appearance-none block w-full px-3 py-2.5 pl-10 border border-slate-300 placeholder-slate-400 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent sm:text-sm bg-slate-50/50"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                     />
@@ -489,7 +489,7 @@ export function ProfilePage() {
                       <Globe className="h-5 w-5 text-slate-400" />
                     </div>
                     <select
-                      className="appearance-none block w-full px-3 py-2.5 pl-10 border border-slate-300 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[--color-brand-accent] focus:border-transparent sm:text-sm bg-slate-50/50"
+                      className="appearance-none block w-full px-3 py-2.5 pl-10 border border-slate-300 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent sm:text-sm bg-slate-50/50"
                       value={preferredLanguage}
                       onChange={(e) => setPreferredLanguage(e.target.value)}
                     >
@@ -526,7 +526,7 @@ export function ProfilePage() {
                     </button>
                   </div>
                   {pendingPassword && (
-                    <p className="text-xs font-semibold text-[--color-brand-accent] mt-2">
+                    <p className="text-xs font-semibold text-(--color-brand-accent) mt-2">
                       {translate("profile.passwordPending")}
                     </p>
                   )}
@@ -571,7 +571,7 @@ export function ProfilePage() {
                 <button
                   type="submit"
                   disabled={isLoading || uploading}
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 text-white bg-[--color-brand-primary] hover:bg-[--color-brand-primary-hover] disabled:opacity-75 disabled:cursor-not-allowed rounded-lg text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 text-white bg-(--color-brand-primary) hover:bg-(--color-brand-primary-hover) disabled:opacity-75 disabled:cursor-not-allowed rounded-lg text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-200"
                 >
                   {isLoading ? (
                     <>
@@ -595,7 +595,7 @@ export function ProfilePage() {
                 <h3 className="text-lg font-bold text-slate-800">{translate("profile.myAddresses")}</h3>
                 <button 
                   onClick={openAddAddressModal}
-                  className="flex items-center gap-2 px-4 py-2 bg-[--color-brand-primary] text-white font-semibold text-sm rounded-lg hover:bg-[--color-brand-primary-hover] transition-colors shadow"
+                  className="flex items-center gap-2 px-4 py-2 bg-(--color-brand-primary) text-white font-semibold text-sm rounded-lg hover:bg-(--color-brand-primary-hover) transition-colors shadow"
                 >
                   <Plus className="w-4 h-4" />
                   {translate("profile.addAddressBtn")}
@@ -604,7 +604,7 @@ export function ProfilePage() {
 
               {loadingAddresses ? (
                 <div className="flex justify-center py-10">
-                  <div className="w-8 h-8 border-4 border-slate-200 border-t-[--color-brand-primary] rounded-full animate-spin"></div>
+                  <div className="w-8 h-8 border-4 border-slate-200 border-t-(--color-brand-primary) rounded-full animate-spin"></div>
                 </div>
               ) : addresses.length === 0 ? (
                 <div className="text-center py-12 bg-slate-50 border border-dashed border-slate-300 rounded-xl">
@@ -614,9 +614,9 @@ export function ProfilePage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {addresses.map((addr) => (
-                    <div key={addr.id} className={`p-5 rounded-xl border relative ${addr.isDefault ? 'border-[--color-brand-primary] bg-blue-50/30' : 'border-slate-200 bg-white'}`}>
+                    <div key={addr.id} className={`p-5 rounded-xl border relative ${addr.isDefault ? 'border-(--color-brand-primary) bg-blue-50/30' : 'border-slate-200 bg-white'}`}>
                       {addr.isDefault && (
-                        <div className="absolute top-4 right-4 text-[--color-brand-accent] flex items-center gap-1 text-xs font-bold uppercase">
+                        <div className="absolute top-4 right-4 text-(--color-brand-accent) flex items-center gap-1 text-xs font-bold uppercase">
                           <Star className="w-4 h-4 fill-current" />
                           {translate("profile.defaultAddress")}
                         </div>
@@ -674,7 +674,7 @@ export function ProfilePage() {
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">{translate("profile.oldPasswordLabel")}</label>
                 <input
                   type="password"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent outline-none"
                   value={oldPasswordInput}
                   onChange={(e) => setOldPasswordInput(e.target.value)}
                 />
@@ -684,7 +684,7 @@ export function ProfilePage() {
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">{translate("profile.newPasswordLabel")}</label>
                 <input
                   type="password"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent outline-none"
                   value={newPasswordInput}
                   onChange={(e) => setNewPasswordInput(e.target.value)}
                 />
@@ -694,7 +694,7 @@ export function ProfilePage() {
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">{translate("profile.repeatPasswordLabel")}</label>
                 <input
                   type="password"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] focus:border-transparent outline-none"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent outline-none"
                   value={repeatPasswordInput}
                   onChange={(e) => setRepeatPasswordInput(e.target.value)}
                 />
@@ -710,7 +710,7 @@ export function ProfilePage() {
               </button>
               <button
                 onClick={handlePasswordModalOk}
-                className="px-5 py-2 bg-[--color-brand-primary] text-white text-sm font-semibold rounded-lg hover:bg-[--color-brand-primary-hover] shadow-md transition-all"
+                className="px-5 py-2 bg-(--color-brand-primary) text-white text-sm font-semibold rounded-lg hover:bg-(--color-brand-primary-hover) shadow-md transition-all"
               >
                 {translate("profile.okBtn")}
               </button>
@@ -737,73 +737,73 @@ export function ProfilePage() {
                 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrAlias")}</label>
-                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] outline-none" 
+                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
                     value={addrAlias} onChange={e => setAddrAlias(e.target.value)} placeholder="e.g. Casa, Trabajo" />
                 </div>
                 
                 <div className="md:col-span-2 grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrFirstName")}</label>
-                    <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] outline-none" 
+                    <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
                       value={addrFirstName} onChange={e => setAddrFirstName(e.target.value)} />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrLastName")}</label>
-                    <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] outline-none" 
+                    <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
                       value={addrLastName} onChange={e => setAddrLastName(e.target.value)} />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrCompany")}</label>
-                  <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] outline-none" 
+                  <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
                     value={addrCompany} onChange={e => setAddrCompany(e.target.value)} />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrPhone")}</label>
-                  <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] outline-none" 
+                  <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
                     value={addrPhone} onChange={e => setAddrPhone(e.target.value)} />
                 </div>
 
                 <div className="md:col-span-2">
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrStreet")}</label>
-                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] outline-none" 
+                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
                     value={addrStreet} onChange={e => setAddrStreet(e.target.value)} />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrCity")}</label>
-                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] outline-none" 
+                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
                     value={addrCity} onChange={e => setAddrCity(e.target.value)} />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrZipCode")}</label>
-                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] outline-none" 
+                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
                     value={addrZipCode} onChange={e => setAddrZipCode(e.target.value)} />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrState")}</label>
-                  <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] outline-none" 
+                  <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
                     value={addrState} onChange={e => setAddrState(e.target.value)} />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrCountry")}</label>
-                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] outline-none" 
+                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
                     value={addrCountry} onChange={e => setAddrCountry(e.target.value)} />
                 </div>
 
                 <div className="md:col-span-2">
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrNotes")}</label>
-                  <textarea rows={2} className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[--color-brand-accent] outline-none" 
+                  <textarea rows={2} className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
                     value={addrNotes} onChange={e => setAddrNotes(e.target.value)} />
                 </div>
 
                 <div className="md:col-span-2 flex items-center gap-2 mt-2">
-                  <input type="checkbox" id="isDefault" className="w-4 h-4 text-[--color-brand-primary] border-slate-300 rounded focus:ring-[--color-brand-primary]" 
+                  <input type="checkbox" id="isDefault" className="w-4 h-4 text-(--color-brand-primary) border-slate-300 rounded focus:ring-(--color-brand-primary)" 
                     checked={addrIsDefault} onChange={e => setAddrIsDefault(e.target.checked)} />
                   <label htmlFor="isDefault" className="text-sm font-medium text-slate-700">{translate("profile.addrIsDefault")}</label>
                 </div>
@@ -821,7 +821,7 @@ export function ProfilePage() {
               <button
                 type="submit"
                 form="address-form"
-                className="px-5 py-2 bg-[--color-brand-primary] text-white text-sm font-semibold rounded-lg hover:bg-[--color-brand-primary-hover] shadow-md transition-all"
+                className="px-5 py-2 bg-(--color-brand-primary) text-white text-sm font-semibold rounded-lg hover:bg-(--color-brand-primary-hover) shadow-md transition-all"
               >
                 {translate("profile.saveBtn")}
               </button>
