@@ -6,8 +6,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import i18n from "../../i18n/config";
-import type { IdentityState } from "./types";
 import { identityService } from "./identityService";
+import type { IdentityState } from "./types";
 
 export const useIdentityStore = create<IdentityState>()(
   persist(
@@ -75,7 +75,10 @@ export const useIdentityStore = create<IdentityState>()(
       updateProfile: async (request) => {
         set({ isLoading: true, error: null });
         try {
-          const updatedUser = await identityService.updateUser(request.id, request);
+          const updatedUser = await identityService.updateUser(
+            request.id,
+            request,
+          );
           set({
             user: {
               id: updatedUser.id,
@@ -138,3 +141,16 @@ export const useIdentityStore = create<IdentityState>()(
     },
   ),
 );
+
+useIdentityStore.subscribe((state) => {
+  const lang = state.user?.preferredLanguage || "en_US";
+  if (i18n.language !== lang) {
+    i18n.changeLanguage(lang);
+  }
+});
+
+const initialLang =
+  useIdentityStore.getState().user?.preferredLanguage || "en_US";
+if (i18n.language !== initialLang) {
+  i18n.changeLanguage(initialLang);
+}
