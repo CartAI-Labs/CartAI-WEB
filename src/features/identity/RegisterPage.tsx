@@ -3,38 +3,20 @@
  * Licensed under the GNU General Public License v3.0. See LICENSE for details.
  */
 
-import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { UserPlus, Mail, Lock, User as UserIcon, ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import { useIdentityStore } from "./identityStore";
+import { useRegisterForm } from "./hooks/useRegisterForm";
 
 export function RegisterPage() {
   const { t: translate } = useTranslation();
-  const navigate = useNavigate();
-  const { register, isLoading, isAuthenticated } = useIdentityStore();
-  
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/catalog");
-    }
-  }, [isAuthenticated, navigate]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await register({ name, email, password });
-      navigate("/catalog");
-    } catch {
-      // Error is handled in the store
-    }
-  };
+  const {
+    form,
+    onChange,
+    isLoading,
+    onSubmit,
+  } = useRegisterForm();
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -55,7 +37,7 @@ export function RegisterPage() {
           </p>
         </div>
         
-        <form className="mt-8 space-y-6 relative z-10" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6 relative z-10" onSubmit={onSubmit}>
 
           <div className="space-y-4 rounded-md shadow-sm">
             <div>
@@ -74,8 +56,8 @@ export function RegisterPage() {
                   required
                   className="appearance-none relative block w-full px-3 py-2.5 pl-10 border border-slate-300 placeholder-slate-400 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent sm:text-sm transition-all bg-slate-50/50"
                   placeholder={translate("auth.namePlaceholder")}
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={form.name}
+                  onChange={onChange}
                 />
               </div>
             </div>
@@ -96,8 +78,8 @@ export function RegisterPage() {
                   required
                   className="appearance-none relative block w-full px-3 py-2.5 pl-10 border border-slate-300 placeholder-slate-400 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent sm:text-sm transition-all bg-slate-50/50"
                   placeholder={translate("auth.emailPlaceholder")}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={form.email}
+                  onChange={onChange}
                 />
               </div>
             </div>
@@ -118,8 +100,8 @@ export function RegisterPage() {
                   required
                   className="appearance-none relative block w-full px-3 py-2.5 pl-10 border border-slate-300 placeholder-slate-400 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent sm:text-sm transition-all bg-slate-50/50"
                   placeholder={translate("auth.passwordPlaceholder")}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={form.password}
+                  onChange={onChange}
                 />
               </div>
             </div>

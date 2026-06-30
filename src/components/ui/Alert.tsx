@@ -3,7 +3,6 @@
  * Licensed under the GNU General Public License v3.0. See LICENSE for details.
  */
 
-import React, { useEffect } from "react";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 import { useAlertLifecycle } from "./useAlertLifecycle";

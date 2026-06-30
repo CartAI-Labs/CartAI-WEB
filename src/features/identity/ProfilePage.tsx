@@ -23,15 +23,14 @@ import {
   ChevronDown,
   Check
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { useIdentityStore } from "./identityStore";
-import { settingsService } from "../settings/settingsService";
-import { addressService } from "./addressService";
-import type { Address, AddressRestRequest } from "../../domain/addressModels";
-import { useToastStore } from "../../components/ui/useToastStore";
+import { useProfilePasswordModal } from "./hooks/useProfilePasswordModal";
+import { useProfileGeneralForm } from "./hooks/useProfileGeneralForm";
+import { useProfileAddresses } from "./hooks/useProfileAddresses";
 
 const getLanguageLabel = (locale: string) => {
   try {
@@ -55,268 +54,51 @@ const renderFlag = (locale: string) => {
 export function ProfilePage() {
   const { t: translate } = useTranslation();
   const navigate = useNavigate();
-  const {
-    user,
-    isAuthenticated,
-    updateProfile,
-    logout,
-    isLoading,
-    uploadAvatar,
-  } = useIdentityStore();
-
+  const { logout, isLoading } = useIdentityStore();
   const [activeTab, setActiveTab] = useState<"general" | "addresses">("general");
 
-  // General tab states
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [taxId, setTaxId] = useState("");
-  const [preferredLanguage, setPreferredLanguage] = useState("");
-  const [languages, setLanguages] = useState<string[]>([]);
-  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
-  
-  const [previewUrl, setPreviewUrl] = useState("");
-  const [uploading, setUploading] = useState(false);
+  const {
+    showPasswordModal,
+    onOpenPasswordModal,
+    onClosePasswordModal,
+    pendingPassword,
+    clearPendingPassword,
+    form: passwordForm,
+    onChange: onPasswordChange,
+    onPasswordModalOk,
+  } = useProfilePasswordModal();
 
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [pendingPassword, setPendingPassword] = useState<{old: string, new: string} | null>(null);
-  const [oldPasswordInput, setOldPasswordInput] = useState("");
-  const [newPasswordInput, setNewPasswordInput] = useState("");
-  const [repeatPasswordInput, setRepeatPasswordInput] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const {
+    user,
+    form: generalForm,
+    onChange: onGeneralChange,
+    languages,
+    isLangDropdownOpen,
+    setIsLangDropdownOpen,
+    previewUrl,
+    setPreviewUrl,
+    uploading,
+    onAvatarChange,
+    onSubmit: onGeneralSubmit,
+  } = useProfileGeneralForm(pendingPassword, clearPendingPassword);
 
-  // Addresses tab states
-  const [addresses, setAddresses] = useState<Address[]>([]);
-  const [loadingAddresses, setLoadingAddresses] = useState(false);
-  const [showAddressModal, setShowAddressModal] = useState(false);
-  const [editingAddress, setEditingAddress] = useState<Address | null>(null);
+  const {
+    addresses,
+    loadingAddresses,
+    showAddressModal,
+    onOpenAddAddressModal,
+    onOpenEditAddressModal,
+    onCloseAddressModal,
+    onSubmit: onAddressSubmit,
+    onDeleteAddress,
+    form: addressForm,
+    onChange: onAddressChange,
+    editingAddress,
+  } = useProfileAddresses(user, activeTab);
 
-  // Address form states
-  const [addrAlias, setAddrAlias] = useState("");
-  const [addrFirstName, setAddrFirstName] = useState("");
-  const [addrLastName, setAddrLastName] = useState("");
-  const [addrCompany, setAddrCompany] = useState("");
-  const [addrStreet, setAddrStreet] = useState("");
-  const [addrCity, setAddrCity] = useState("");
-  const [addrZipCode, setAddrZipCode] = useState("");
-  const [addrPhone, setAddrPhone] = useState("");
-  const [addrState, setAddrState] = useState("");
-  const [addrCountry, setAddrCountry] = useState("");
-  const [addrNotes, setAddrNotes] = useState("");
-  const [addrIsDefault, setAddrIsDefault] = useState(false);
-
-  // Redirect if not authenticated and init general states
-  useEffect(() => {
-    if (!isAuthenticated || !user) {
-      navigate("/login");
-    } else {
-      setName(user.name || "");
-      setEmail(user.email || "");
-      setPhone(user.phone || "");
-      setTaxId(user.taxId || "");
-      setPreferredLanguage(user.preferredLanguage || "");
-      
-      if (user.avatarFileId) {
-        setPreviewUrl(
-          `${import.meta.env.VITE_API_BASE_URL || "http://localhost:8080"}/api/storage/files/${user.avatarFileId}`,
-        );
-      }
-    }
-  }, [isAuthenticated, user, navigate]);
-
-  // Fetch languages
-  useEffect(() => {
-    settingsService.getLanguages().then(setLanguages).catch(console.error);
-  }, []);
-
-  // Close language dropdown on outside click
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (!target.closest(".lang-dropdown-container")) {
-        setIsLangDropdownOpen(false);
-      }
-    };
-    document.addEventListener("click", handleOutsideClick);
-    return () => document.removeEventListener("click", handleOutsideClick);
-  }, []);
-
-  // Fetch addresses when tab changes
-  useEffect(() => {
-    if (activeTab === "addresses" && user) {
-      loadAddresses();
-    }
-  }, [activeTab, user]);
-
-  const loadAddresses = async () => {
-    if (!user) return;
-    setLoadingAddresses(true);
-    try {
-      const data = await addressService.getUserAddresses(user.id);
-      setAddresses(data);
-    } catch (err) {
-      console.error(err);
-      useToastStore.getState().addToast(translate("profile.errorLoadingAddresses"), "error");
-    } finally {
-      setLoadingAddresses(false);
-    }
-  };
-
-  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-    setUploading(true);
-
-    try {
-      if (!user) return;
-      await uploadAvatar(user.id, file);
-    } catch (err: any) {
-      if (user?.avatarFileId) {
-        setPreviewUrl(
-          `${import.meta.env.VITE_API_BASE_URL || "http://localhost:8080"}/api/storage/files/${user.avatarFileId}`,
-        );
-      } else {
-        setPreviewUrl("");
-      }
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handleGeneralSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return;
-
-    try {
-      await updateProfile({
-        id: user.id,
-        name,
-        roles: user.roles,
-        avatarFileId: user.avatarFileId || undefined,
-        oldPassword: pendingPassword?.old,
-        newPassword: pendingPassword?.new,
-        phone,
-        taxId,
-        preferredLanguage
-      });
-      setPendingPassword(null);
-    } catch (err: any) {
-      // Handled in store
-    }
-  };
-
-  const handleLogout = () => {
+  const onLogout = () => {
     logout();
     navigate("/");
-  };
-
-  const handlePasswordModalOk = () => {
-    if (!oldPasswordInput || !newPasswordInput || !repeatPasswordInput) {
-      setPasswordError(translate("profile.errorAllFields"));
-      return;
-    }
-    if (newPasswordInput !== repeatPasswordInput) {
-      setPasswordError(translate("profile.errorMismatch"));
-      return;
-    }
-    setPendingPassword({ old: oldPasswordInput, new: newPasswordInput });
-    setShowPasswordModal(false);
-    setOldPasswordInput("");
-    setNewPasswordInput("");
-    setRepeatPasswordInput("");
-    setPasswordError("");
-  };
-
-  const handlePasswordModalCancel = () => {
-    setShowPasswordModal(false);
-    setOldPasswordInput("");
-    setNewPasswordInput("");
-    setRepeatPasswordInput("");
-    setPasswordError("");
-  };
-
-  // Address Modal logic
-  const openAddAddressModal = () => {
-    setEditingAddress(null);
-    setAddrAlias("");
-    setAddrFirstName("");
-    setAddrLastName("");
-    setAddrCompany("");
-    setAddrStreet("");
-    setAddrCity("");
-    setAddrZipCode("");
-    setAddrPhone("");
-    setAddrState("");
-    setAddrCountry("");
-    setAddrNotes("");
-    setAddrIsDefault(false);
-    setShowAddressModal(true);
-  };
-
-  const openEditAddressModal = (addr: Address) => {
-    setEditingAddress(addr);
-    setAddrAlias(addr.alias);
-    setAddrFirstName(addr.firstName);
-    setAddrLastName(addr.lastName);
-    setAddrCompany(addr.company || "");
-    setAddrStreet(addr.street);
-    setAddrCity(addr.city);
-    setAddrZipCode(addr.zipCode);
-    setAddrPhone(addr.phone || "");
-    setAddrState(addr.state || "");
-    setAddrCountry(addr.country);
-    setAddrNotes(addr.notes || "");
-    setAddrIsDefault(addr.isDefault);
-    setShowAddressModal(true);
-  };
-
-  const handleAddressSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return;
-    
-    const request: AddressRestRequest = {
-      alias: addrAlias,
-      firstName: addrFirstName,
-      lastName: addrLastName,
-      company: addrCompany,
-      street: addrStreet,
-      city: addrCity,
-      zipCode: addrZipCode,
-      phone: addrPhone,
-      state: addrState,
-      country: addrCountry,
-      notes: addrNotes,
-      isDefault: addrIsDefault
-    };
-
-    try {
-      if (editingAddress) {
-        await addressService.updateAddress(user.id, editingAddress.id, request);
-      } else {
-        await addressService.addAddress(user.id, request);
-      }
-      setShowAddressModal(false);
-      loadAddresses();
-    } catch (err) {
-      console.error(err);
-      useToastStore.getState().addToast(translate("profile.errorSavingAddress"), "error");
-    }
-  };
-
-  const handleDeleteAddress = async (addrId: string) => {
-    if (!user) return;
-    if (confirm(translate("profile.confirmDeleteAddress"))) {
-      try {
-        await addressService.deleteAddress(user.id, addrId);
-        loadAddresses();
-      } catch (err) {
-        console.error(err);
-        useToastStore.getState().addToast(translate("profile.errorDeletingAddress"), "error");
-      }
-    }
   };
 
   return (
@@ -362,7 +144,7 @@ export function ProfilePage() {
         <div className="p-8">
 
           {activeTab === "general" && (
-            <form onSubmit={handleGeneralSubmit} className="space-y-8 animate-in fade-in">
+            <form onSubmit={onGeneralSubmit} className="space-y-8 animate-in fade-in">
               {/* Avatar Section */}
               <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-slate-100">
                 <div className="relative group">
@@ -393,7 +175,7 @@ export function ProfilePage() {
                       id="avatar-input"
                       accept="image/*"
                       className="hidden"
-                      onChange={handleAvatarChange}
+                      onChange={onAvatarChange}
                       disabled={uploading}
                     />
                   </label>
@@ -425,9 +207,7 @@ export function ProfilePage() {
                       value={user?.id || ""}
                     />
                   </div>
-                </div>
-
-                <div>
+                </div>                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
                     {translate("profile.taxIdLabel", "Documento de Identidad (DNI)")}
                   </label>
@@ -437,9 +217,10 @@ export function ProfilePage() {
                     </div>
                     <input
                       type="text"
+                      name="taxId"
                       className="appearance-none block w-full px-3 py-2.5 pl-10 border border-slate-300 placeholder-slate-400 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent sm:text-sm bg-slate-50/50"
-                      value={taxId}
-                      onChange={(e) => setTaxId(e.target.value)}
+                      value={generalForm.taxId}
+                      onChange={onGeneralChange}
                     />
                   </div>
                 </div>
@@ -456,7 +237,7 @@ export function ProfilePage() {
                       type="email"
                       disabled
                       className="appearance-none block w-full px-3 py-2.5 pl-10 border border-slate-300 text-slate-500 bg-slate-100 rounded-lg sm:text-sm cursor-not-allowed"
-                      value={email}
+                      value={generalForm.email}
                     />
                   </div>
                 </div>
@@ -471,10 +252,11 @@ export function ProfilePage() {
                     </div>
                     <input
                       type="text"
+                      name="name"
                       required
                       className="appearance-none block w-full px-3 py-2.5 pl-10 border border-slate-300 placeholder-slate-400 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent sm:text-sm bg-slate-50/50"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      value={generalForm.name}
+                      onChange={onGeneralChange}
                     />
                   </div>
                 </div>
@@ -489,9 +271,10 @@ export function ProfilePage() {
                     </div>
                     <input
                       type="text"
+                      name="phone"
                       className="appearance-none block w-full px-3 py-2.5 pl-10 border border-slate-300 placeholder-slate-400 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent sm:text-sm bg-slate-50/50"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      value={generalForm.phone}
+                      onChange={onGeneralChange}
                     />
                   </div>
                 </div>
@@ -510,10 +293,10 @@ export function ProfilePage() {
                       className="w-full flex items-center justify-between px-3 py-2.5 pl-10 border border-slate-300 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent sm:text-sm bg-slate-50/50 text-left transition-all"
                     >
                       <span className="flex items-center gap-2">
-                        {preferredLanguage ? (
+                        {generalForm.preferredLanguage ? (
                           <>
-                            {renderFlag(preferredLanguage)}
-                            <span>{getLanguageLabel(preferredLanguage)}</span>
+                            {renderFlag(generalForm.preferredLanguage)}
+                            <span>{getLanguageLabel(generalForm.preferredLanguage)}</span>
                           </>
                         ) : (
                           <span className="text-slate-400">{translate("profile.selectLanguage")}</span>
@@ -529,16 +312,16 @@ export function ProfilePage() {
                             key={lang}
                             type="button"
                             onClick={() => {
-                                setPreferredLanguage(lang);
+                                onGeneralChange({ name: "preferredLanguage", value: lang });
                                 setIsLangDropdownOpen(false);
                             }}
                             className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-slate-50 transition-colors ${
-                              preferredLanguage === lang ? 'bg-blue-50/30 font-semibold text-(--color-brand-primary)' : 'text-slate-700'
+                              generalForm.preferredLanguage === lang ? 'bg-blue-50/30 font-semibold text-(--color-brand-primary)' : 'text-slate-700'
                             }`}
                           >
                             {renderFlag(lang)}
                             <span>{getLanguageLabel(lang)}</span>
-                            {preferredLanguage === lang && (
+                            {generalForm.preferredLanguage === lang && (
                               <Check className="w-4 h-4 text-(--color-brand-primary) ml-auto" />
                             )}
                           </button>
@@ -566,7 +349,7 @@ export function ProfilePage() {
                     </div>
                     <button
                       type="button"
-                      onClick={() => setShowPasswordModal(true)}
+                      onClick={onOpenPasswordModal}
                       className="px-4 py-2.5 text-sm font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
                     >
                       {translate("profile.updatePasswordBtn")}
@@ -608,7 +391,7 @@ export function ProfilePage() {
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-100">
                 <button
                   type="button"
-                  onClick={handleLogout}
+                  onClick={onLogout}
                   className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 border border-red-200 text-red-600 hover:bg-red-50 rounded-lg text-sm font-semibold transition-all duration-200"
                 >
                   <LogOut className="w-4 h-4" />
@@ -641,7 +424,7 @@ export function ProfilePage() {
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-lg font-bold text-slate-800">{translate("profile.myAddresses")}</h3>
                 <button 
-                  onClick={openAddAddressModal}
+                  onClick={onOpenAddAddressModal}
                   className="flex items-center gap-2 px-4 py-2 bg-(--color-brand-primary) text-white font-semibold text-sm rounded-lg hover:bg-(--color-brand-primary-hover) transition-colors shadow"
                 >
                   <Plus className="w-4 h-4" />
@@ -678,13 +461,13 @@ export function ProfilePage() {
                       
                       <div className="mt-4 pt-4 border-t border-slate-100 flex justify-end gap-3">
                         <button 
-                          onClick={() => openEditAddressModal(addr)}
+                          onClick={() => onOpenEditAddressModal(addr)}
                           className="p-1.5 text-slate-400 hover:text-blue-600 transition-colors"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button 
-                          onClick={() => handleDeleteAddress(addr.id)}
+                          onClick={() => onDeleteAddress(addr.id)}
                           className="p-1.5 text-slate-400 hover:text-red-600 transition-colors"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -705,15 +488,15 @@ export function ProfilePage() {
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
               <h3 className="text-lg font-bold text-slate-900">{translate("profile.modalTitle")}</h3>
-              <button onClick={handlePasswordModalCancel} className="text-slate-400 hover:text-slate-600 transition-colors">
+              <button onClick={onClosePasswordModal} className="text-slate-400 hover:text-slate-600 transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
             
             <div className="p-6 space-y-4">
-              {passwordError && (
+              {passwordForm.error && (
                 <div className="p-3 bg-red-50 text-red-700 text-sm font-medium rounded-lg border border-red-100">
-                  {passwordError}
+                  {passwordForm.error}
                 </div>
               )}
               
@@ -721,9 +504,10 @@ export function ProfilePage() {
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">{translate("profile.oldPasswordLabel")}</label>
                 <input
                   type="password"
+                  name="old"
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent outline-none"
-                  value={oldPasswordInput}
-                  onChange={(e) => setOldPasswordInput(e.target.value)}
+                  value={passwordForm.old}
+                  onChange={onPasswordChange}
                 />
               </div>
               
@@ -731,9 +515,10 @@ export function ProfilePage() {
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">{translate("profile.newPasswordLabel")}</label>
                 <input
                   type="password"
+                  name="new"
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent outline-none"
-                  value={newPasswordInput}
-                  onChange={(e) => setNewPasswordInput(e.target.value)}
+                  value={passwordForm.new}
+                  onChange={onPasswordChange}
                 />
               </div>
               
@@ -741,22 +526,23 @@ export function ProfilePage() {
                 <label className="block text-sm font-semibold text-slate-700 mb-1.5">{translate("profile.repeatPasswordLabel")}</label>
                 <input
                   type="password"
+                  name="repeat"
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent outline-none"
-                  value={repeatPasswordInput}
-                  onChange={(e) => setRepeatPasswordInput(e.target.value)}
+                  value={passwordForm.repeat}
+                  onChange={onPasswordChange}
                 />
               </div>
             </div>
             
             <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
               <button
-                onClick={handlePasswordModalCancel}
+                onClick={onClosePasswordModal}
                 className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800 transition-colors"
               >
                 {translate("profile.cancelBtn")}
               </button>
               <button
-                onClick={handlePasswordModalOk}
+                onClick={onPasswordModalOk}
                 className="px-5 py-2 bg-(--color-brand-primary) text-white text-sm font-semibold rounded-lg hover:bg-(--color-brand-primary-hover) shadow-md transition-all"
               >
                 {translate("profile.okBtn")}
@@ -774,84 +560,83 @@ export function ProfilePage() {
               <h3 className="text-lg font-bold text-slate-900">
                 {editingAddress ? translate("profile.editAddressTitle") : translate("profile.addAddressTitle")}
               </h3>
-              <button onClick={() => setShowAddressModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
+              <button onClick={onCloseAddressModal} className="text-slate-400 hover:text-slate-600 transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="p-6">
-              <form id="address-form" onSubmit={handleAddressSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                
+              <form id="address-form" onSubmit={onAddressSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrAlias")}</label>
-                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
-                    value={addrAlias} onChange={e => setAddrAlias(e.target.value)} placeholder="e.g. Casa, Trabajo" />
+                  <input required type="text" name="alias" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
+                    value={addressForm.alias} onChange={onAddressChange} placeholder="e.g. Casa, Trabajo" />
                 </div>
                 
                 <div className="md:col-span-2 grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrFirstName")}</label>
-                    <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
-                      value={addrFirstName} onChange={e => setAddrFirstName(e.target.value)} />
+                    <input required type="text" name="firstName" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
+                      value={addressForm.firstName} onChange={onAddressChange} />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrLastName")}</label>
-                    <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
-                      value={addrLastName} onChange={e => setAddrLastName(e.target.value)} />
+                    <input required type="text" name="lastName" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
+                      value={addressForm.lastName} onChange={onAddressChange} />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrCompany")}</label>
-                  <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
-                    value={addrCompany} onChange={e => setAddrCompany(e.target.value)} />
+                  <input type="text" name="company" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
+                    value={addressForm.company} onChange={onAddressChange} />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrPhone")}</label>
-                  <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
-                    value={addrPhone} onChange={e => setAddrPhone(e.target.value)} />
+                  <input type="text" name="phone" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
+                    value={addressForm.phone} onChange={onAddressChange} />
                 </div>
 
                 <div className="md:col-span-2">
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrStreet")}</label>
-                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
-                    value={addrStreet} onChange={e => setAddrStreet(e.target.value)} />
+                  <input required type="text" name="street" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
+                    value={addressForm.street} onChange={onAddressChange} />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrCity")}</label>
-                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
-                    value={addrCity} onChange={e => setAddrCity(e.target.value)} />
+                  <input required type="text" name="city" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
+                    value={addressForm.city} onChange={onAddressChange} />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrZipCode")}</label>
-                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
-                    value={addrZipCode} onChange={e => setAddrZipCode(e.target.value)} />
+                  <input required type="text" name="zipCode" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
+                    value={addressForm.zipCode} onChange={onAddressChange} />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrState")}</label>
-                  <input type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
-                    value={addrState} onChange={e => setAddrState(e.target.value)} />
+                  <input type="text" name="state" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
+                    value={addressForm.state} onChange={onAddressChange} />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrCountry")}</label>
-                  <input required type="text" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
-                    value={addrCountry} onChange={e => setAddrCountry(e.target.value)} />
+                  <input required type="text" name="country" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
+                    value={addressForm.country} onChange={onAddressChange} />
                 </div>
 
                 <div className="md:col-span-2">
                   <label className="block text-sm font-semibold text-slate-700 mb-1">{translate("profile.addrNotes")}</label>
-                  <textarea rows={2} className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
-                    value={addrNotes} onChange={e => setAddrNotes(e.target.value)} />
+                  <textarea rows={2} name="notes" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-(--color-brand-accent) outline-none" 
+                    value={addressForm.notes} onChange={onAddressChange} />
                 </div>
 
                 <div className="md:col-span-2 flex items-center gap-2 mt-2">
-                  <input type="checkbox" id="isDefault" className="w-4 h-4 text-(--color-brand-primary) border-slate-300 rounded focus:ring-(--color-brand-primary)" 
-                    checked={addrIsDefault} onChange={e => setAddrIsDefault(e.target.checked)} />
+                  <input type="checkbox" id="isDefault" name="isDefault" className="w-4 h-4 text-(--color-brand-primary) border-slate-300 rounded focus:ring-(--color-brand-primary)" 
+                    checked={addressForm.isDefault} onChange={e => onAddressChange({ name: "isDefault", value: e.target.checked })} />
                   <label htmlFor="isDefault" className="text-sm font-medium text-slate-700">{translate("profile.addrIsDefault")}</label>
                 </div>
               </form>
@@ -860,7 +645,7 @@ export function ProfilePage() {
             <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 sticky bottom-0">
               <button
                 type="button"
-                onClick={() => setShowAddressModal(false)}
+                onClick={onCloseAddressModal}
                 className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800 transition-colors"
               >
                 {translate("profile.cancelBtn")}
