@@ -97,7 +97,6 @@ describe("useIdentityStore", () => {
     await store.updateProfile({
       id: "user-id-123",
       name: "Updated User",
-      email: "updated@example.com",
       roles: ["USER"],
       avatarFileId: "avatar-file-id-456",
     });

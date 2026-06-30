@@ -115,7 +115,6 @@ export function ProfilePage() {
       await updateProfile({
         id: user.id,
         name,
-        email,
         roles: user.roles,
         avatarFileId: user.avatarFileId || undefined,
         oldPassword: pendingPassword?.old,

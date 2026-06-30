@@ -35,7 +35,6 @@ export interface RegisterRestRequest {
 export interface UpdateUserRestRequest {
   id: string;
   name: string;
-  email: string;
   roles: string[];
   avatarFileId?: string;
   oldPassword?: string;
