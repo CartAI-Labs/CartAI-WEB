@@ -211,5 +211,10 @@
     "updatePasswordBtn": "Update Password",
     "uploadError": "Error uploading avatar. Please try again.",
     "uploadSuccess": "Profile picture successfully uploaded."
+  },
+  "system": {
+    "errorDescription": "We couldn't connect to the Cart•AI server. Please check your internet connection or try again in a few minutes.",
+    "errorRetry": "Retry Connection",
+    "errorTitle": "Server Unavailable"
   }
 }

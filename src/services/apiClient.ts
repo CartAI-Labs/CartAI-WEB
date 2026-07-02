@@ -37,9 +37,20 @@ apiClient.interceptors.request.use(
 );
 
 // We can also add a response interceptor here later for global 401 handling
+import { useSystemErrorStore } from "./systemErrorStore";
+
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    if (axios.isCancel(error)) {
+      return Promise.reject(error);
+    }
+
+    // Check if it's a connection/network error or a 5xx server error
+    if (!error.response || (error.response.status >= 500 && error.response.status <= 599)) {
+      useSystemErrorStore.getState().setSystemError(true);
+    }
+
     if (error.response?.status === 401) {
       // Optional: Handle unauthorized (e.g., clear store, redirect to login)
       console.warn("Unauthorized API call detected");

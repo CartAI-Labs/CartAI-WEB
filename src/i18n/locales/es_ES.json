@@ -211,5 +211,10 @@
     "updatePasswordBtn": "Actualizar Contraseña",
     "uploadError": "Error al subir el avatar. Por favor intenta de nuevo.",
     "uploadSuccess": "Foto de perfil subida correctamente."
+  },
+  "system": {
+    "errorDescription": "No hemos podido establecer conexión con el servidor de Cart•AI. Por favor, comprueba tu conexión a internet o inténtalo de nuevo en unos minutos.",
+    "errorRetry": "Reintentar conexión",
+    "errorTitle": "Servidor no disponible"
   }
 }
