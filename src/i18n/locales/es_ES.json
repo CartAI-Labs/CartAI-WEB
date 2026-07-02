@@ -101,12 +101,16 @@
     "addToCart": "Añadir al Carrito",
     "cartTitle": "Tu Carrito",
     "clearCart": "Vaciar Carrito",
+    "close": "Cerrar",
     "emptyCart": "El carrito está vacío.",
     "inStock": "En stock: {{count}}",
     "itemsCount": "artículos",
+    "next": "Siguiente",
     "outOfStock": "Agotado",
+    "previous": "Anterior",
     "title": "Catálogo de Productos",
-    "total": "Total"
+    "total": "Total",
+    "zoomImage": "Ampliar imagen"
   },
   "features": {
     "ai": {

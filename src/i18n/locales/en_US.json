@@ -101,12 +101,16 @@
     "addToCart": "Add to Cart",
     "cartTitle": "Your Cart",
     "clearCart": "Clear Cart",
+    "close": "Close",
     "emptyCart": "Your cart is empty.",
     "inStock": "In stock: {{count}}",
     "itemsCount": "items",
+    "next": "Next",
     "outOfStock": "Out of Stock",
+    "previous": "Previous",
     "title": "Product Catalog",
-    "total": "Total"
+    "total": "Total",
+    "zoomImage": "Zoom image"
   },
   "features": {
     "ai": {

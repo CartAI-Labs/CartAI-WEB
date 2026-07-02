@@ -1,4 +1,4 @@
-import { Search, Plus, Edit2, Trash2, X, PackageOpen, ImageIcon } from "lucide-react";
+import { Search, Plus, Edit2, Trash2, X, PackageOpen, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ProductImage } from "../catalog/components/ProductImage";
 import { useProductManagement } from "./hooks/useProductManagement";
@@ -11,13 +11,15 @@ export function ProductManagement() {
     setSearchQuery,
     showModal,
     form,
-    imageFile,
+    images,
     isSubmitting,
     openCreateModal,
     openEditModal,
     closeModal,
     handleFormChange,
     handleImageChange,
+    setMainImage,
+    removeImage,
     onCreateSubmit,
     onEditSubmit,
     handleDeleteProduct,
@@ -224,43 +226,49 @@ export function ProductManagement() {
                 {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                    {translate("admin.formImageLabel", "Imagen del Producto")}
+                    {translate("admin.formImageLabel", "Imágenes del Producto")}
                   </label>
-                  <div className="flex items-center gap-4">
-                    {(imageFile || (form.imageFileIds && form.imageFileIds.length > 0)) && (
-                      <div className="w-16 h-16 rounded-lg border border-slate-200 overflow-hidden shrink-0 bg-slate-50 flex items-center justify-center">
-                        {imageFile ? (
-                          <img
-                            src={URL.createObjectURL(imageFile)}
-                            alt="Preview"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <ProductImage 
-                            imageFileIds={form.imageFileIds} 
-                            alt="Current" 
-                            iconSize={24} 
-                            showFallbackText={false}
-                          />
-                        )}
-                      </div>
-                    )}
-                    <div className="flex-1">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          if (e.target.files && e.target.files.length > 0) {
-                            handleImageChange(e.target.files[0]);
-                          }
-                        }}
-                        className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-(--color-brand-primary) file:text-white hover:file:bg-(--color-brand-primary-hover) cursor-pointer"
-                      />
-                      <p className="mt-1 text-xs text-slate-400">
-                        {translate("admin.formImageSpecs", "Opcional. Sube una imagen en formato JPG o PNG.")}
-                      </p>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={(e) => handleImageChange(e.target.files)}
+                    className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-(--color-brand-primary) file:text-white hover:file:bg-(--color-brand-primary-hover) cursor-pointer mb-4"
+                  />
+                  
+                  {images.length > 0 && (
+                    <div className="grid grid-cols-4 gap-4 mt-4">
+                      {images.map((img, index) => (
+                        <div key={img.id} className={`relative group w-full aspect-square rounded-lg border-2 overflow-hidden ${index === 0 ? 'border-(--color-brand-accent)' : 'border-slate-200'}`}>
+                          {img.type === 'existing' ? (
+                            <ProductImage imageFileIds={[img.id]} alt={`img-${index}`} showFallbackText={false} iconSize={24} />
+                          ) : (
+                            <img src={img.previewUrl} alt="preview" className="w-full h-full object-cover" />
+                          )}
+                          
+                          {index === 0 && (
+                            <div className="absolute top-0 left-0 bg-(--color-brand-accent) text-white text-[10px] font-bold px-2 py-1 rounded-br-lg z-10 shadow-sm">
+                              {translate("admin.primaryImage", "Principal")}
+                            </div>
+                          )}
+
+                          <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 z-20">
+                            {index !== 0 && (
+                              <button type="button" onClick={() => setMainImage(index)} className="p-1.5 bg-white text-slate-800 rounded-md hover:text-(--color-brand-accent) transition-colors cursor-pointer" title={translate("admin.makePrimary", "Hacer principal")}>
+                                <Star className="w-4 h-4" />
+                              </button>
+                            )}
+                            <button type="button" onClick={() => removeImage(index)} className="p-1.5 bg-white text-red-600 rounded-md hover:bg-red-50 transition-colors cursor-pointer" title={translate("admin.deleteImage", "Eliminar imagen")}>
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  </div>
+                  )}
+                  <p className="mt-2 text-xs text-slate-400">
+                    {translate("admin.formImageSpecs", "Opcional. Sube una o varias imágenes en formato JPG o PNG.")}
+                  </p>
                 </div>
               </div>
 

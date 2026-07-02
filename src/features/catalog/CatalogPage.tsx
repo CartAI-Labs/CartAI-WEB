@@ -3,7 +3,7 @@
  * Licensed under the GNU General Public License v3.0. See LICENSE for details.
  */
 
-import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useCartStore } from "../cart/cartStore";

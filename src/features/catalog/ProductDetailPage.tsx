@@ -4,7 +4,7 @@ import { ArrowLeft, Plus } from "lucide-react";
 import { useCartStore } from "../cart/cartStore";
 import { CartSidebar } from "../cart/CartSidebar";
 import { useProductDetail } from "./hooks/useProductDetail";
-import { ProductImage } from "./components/ProductImage";
+import { ProductImageCarousel } from "./components/ProductImageCarousel";
 
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -44,13 +44,10 @@ export function ProductDetailPage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
             {/* Imagen */}
             <div className="md:col-span-5 lg:col-span-4">
-              <div className="w-full aspect-square rounded-2xl overflow-hidden bg-slate-50 border border-slate-100/80 flex items-center justify-center">
-                <ProductImage 
-                  imageFileIds={product.imageFileIds} 
-                  alt={product.name} 
-                  iconSize={80} 
-                />
-              </div>
+              <ProductImageCarousel 
+                imageFileIds={product.imageFileIds} 
+                alt={product.name} 
+              />
             </div>
 
             {/* Detalles */}
