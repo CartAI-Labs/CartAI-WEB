@@ -95,11 +95,16 @@ This section details the current progress, architectural decisions, and the deve
   - Creado el componente premium [SystemErrorScreen.tsx](file:///Users/rober/work/CartAI-WEB/src/components/layout/SystemErrorScreen.tsx) que bloquea la interfaz mostrando una pantalla de mantenimiento con luces degradadas en fondo oscuro, botón de reintento manual (con ping rápido sin interceptores) y un sondeo automático (`setInterval`) en segundo plano para recuperar la aplicación automáticamente si el servidor vuelve a responder.
   - Actualizado [App.tsx](file:///Users/rober/work/CartAI-WEB/src/App.tsx) para interceptar el flujo y renderizar la pantalla de error global en lugar de los enrutadores de la app si hay un fallo de conexión activo.
   - Añadido el bloque de traducciones `"system"` al final de [es_ES.json](file:///Users/rober/work/CartAI-WEB/src/i18n/locales/es_ES.json) y [en_US.json](file:///Users/rober/work/CartAI-WEB/src/i18n/locales/en_US.json) en estricto orden alfabético.
-* **Sincronización de Expiración de Sesión (Step 15)**:
+* **Sincronización de Expiración de Sesión (Step 15 - CAR-15)**:
   - Creado el endpoint `/api/auth/refresh` en el backend para generar nuevos JWTs basados en tokens vigentes y su correspondiente suite de tests de integración en `AuthIT.java`.
   - Implementada la decodificación del payload del JWT y monitoreo de expiración client-side mediante [SessionTimeoutWatcher.tsx](file:///Users/rober/work/CartAI-WEB/src/components/layout/SessionTimeoutWatcher.tsx), montado en la raíz de [App.tsx](file:///Users/rober/work/CartAI-WEB/src/App.tsx).
-  - Añadido Toast de advertencia interactivo tipo `warning` con cuenta atrás dinámica de 60s, botón "Ampliar sesión" que ejecuta la renovación y reinicia los timers, y logout automático en caso de agotamiento del tiempo.
+  - Añadido Toast de advertencia interactivo tipo `warning` con cuenta atrás dinámica de 60s, botón "Ampliar sesión" que ejecuta la renovación y reinicia los timers, y logout automático con Toast de error tipo `error` en caso de agotamiento del tiempo.
   - Creadas las suites de pruebas unitarias para el componente de cuenta atrás y la acción del store.
+  - Resueltos los problemas de desmontaje/doble montaje de React 18 StrictMode en [ToastContainer.tsx](file:///Users/rober/work/CartAI-WEB/src/components/ui/ToastContainer.tsx) mediante un `useEffect` local y la extracción de interfaces a un archivo centralizado [models.ts](file:///Users/rober/work/CartAI-WEB/src/components/ui/models.ts).
+* **Internacionalización Estricta (CAR-17)**:
+  - Eliminados todos los valores por defecto / fallback en las llamadas a `translate` (`t`) de componentes clave como `SystemErrorScreen`, `ProductImageCarousel`, `ProfilePage`, y `ProductDetailPage`.
+  - Esto garantiza que cualquier traducción ausente falle de forma visible (`key` devuelta) y no quede oculta en la UI, forzando la consistencia estricta con los archivos de locales.
+  - Actualizados los mocks de prueba en `SystemErrorScreen.test.tsx` y `ProductImageCarousel.test.tsx` para mapear de manera explícita las claves necesarias en lugar de retornar argumentos por defecto.
 
 ---
 

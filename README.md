@@ -22,11 +22,12 @@ This web project is architected as a decoupled, white-labeled client, prepared t
 
 ## Core Features
 
-* 🌐 **Full Internationalization (i18n)**: Out-of-the-box support for English and Spanish, dynamically driven by semantic translation functions (`translate`).
+* 🌐 **Strict Translation System (i18n)**: Out-of-the-box support for English and Spanish, dynamically driven by semantic translation functions (`translate`). Zero default fallback strings are allowed in code, ensuring all UI text strictly maps to local dictionary definitions.
+* 🔒 **JWT Session Watcher**: Real-time client-side monitoring of token expiration, displaying a 60-second warning countdown toast with a quick session extension action (renews JWT), automatically loging out and alerting the user upon expiration.
+* 🚨 **System Recovery Overlay**: A premium maintenance and system error screen with light glow effects that automatically intercepts backend server errors (5xx/network loss), featuring auto-polling in the background to automatically restore screen access once the server is back online.
 * 🛒 **Zustand State Store**: Immutable cart state management with per-product stock boundaries and local persistence via `localStorage`.
 * 🎨 **Hot Theme Merging (White-labeling)**: Support for overrides in the color system via an external config file (`public/theme-custom.json`). This dynamically merges with an internal corporate fallback config at startup without breaking the layout.
 * 📈 **Interactive Analytics Dashboard**: A high-fidelity Hero dashboard featuring animated SVG sales chart gradients, simulated real-time metrics, and AI recommendation cards.
-* ⚡ **Semantic CSS Utilities**: Strict separation of presentation and React structure using custom Tailwind v4 `@utility` declarations in `index.css`.
 
 ---
 
