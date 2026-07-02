@@ -6,8 +6,16 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes";
 import { ToastContainer } from "./components/ui/ToastContainer";
+import { useSystemErrorStore } from "./services/systemErrorStore";
+import { SystemErrorScreen } from "./components/layout/SystemErrorScreen";
 
 function App() {
+  const hasSystemError = useSystemErrorStore((state) => state.hasSystemError);
+
+  if (hasSystemError) {
+    return <SystemErrorScreen />;
+  }
+
   return (
     <>
       <RouterProvider router={router} />

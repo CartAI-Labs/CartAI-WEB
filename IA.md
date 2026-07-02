@@ -86,9 +86,17 @@ This section details the current progress, architectural decisions, and the deve
   - Diseñado e implementado el menú interactivo (Dropdown) de perfil en la barra de navegación, aislando su estado y el listener de click fuera de la caja en el custom hook [useNavbar.ts](file:///Users/rober/work/CartAI-WEB/src/components/layout/hooks/useNavbar.ts).
   - Desarrollada la protección de rutas mediante [AdminGuard.tsx](file:///Users/rober/work/CartAI-WEB/src/features/admin/AdminGuard.tsx) y la distribución del panel lateral en [AdminLayout.tsx](file:///Users/rober/work/CartAI-WEB/src/features/admin/AdminLayout.tsx).
   - Creado el panel de control de gestión de usuarios (CRUD) mediante [UserManagement.tsx](file:///Users/rober/work/CartAI-WEB/src/features/admin/UserManagement.tsx) y el hook de lógica [useUserManagement.ts](file:///Users/rober/work/CartAI-WEB/src/features/admin/hooks/useUserManagement.ts).
-  - Creada la gestión de roles y permisos mediante [RoleManagement.tsx](file:///Users/rober/work/CartAI-WEB/src/features/admin/RoleManagement.tsx) y su respectivo hook [useRoleManagement.ts](file:///Users/rober/work/CartAI-WEB/src/features/admin/hooks/useRoleManagement.ts).
+  - La gestión de roles y permisos mediante [RoleManagement.tsx](file:///Users/rober/work/CartAI-WEB/src/features/admin/RoleManagement.tsx) y su respectivo hook [useRoleManagement.ts](file:///Users/rober/work/CartAI-WEB/src/features/admin/hooks/useRoleManagement.ts).
   - Todos los endpoints se comunican en tiempo real con la API local en Spring Boot y persisten los datos en MongoDB.
   - Las claves de localización en [es_ES.json](file:///Users/rober/work/CartAI-WEB/src/i18n/locales/es_ES.json) y [en_US.json](file:///Users/rober/work/CartAI-WEB/src/i18n/locales/en_US.json) han sido ordenadas alfabéticamente de forma estricta.
+* **Pantalla de Caída de Servidor y Auto-Reconexión (Step 14)**:
+  - Creado [systemErrorStore.ts](file:///Users/rober/work/CartAI-WEB/src/services/systemErrorStore.ts) para almacenar el estado global de error de conexión y la variable configurable `pollingInterval` (por defecto en 10s).
+  - Modificado [apiClient.ts](file:///Users/rober/work/CartAI-WEB/src/services/apiClient.ts) con un interceptor de respuesta que captura fallos de red o errores HTTP de servidor (5xx) para activar el estado de error, omitiendo cancelaciones explícitas de Axios.
+  - Creado el componente premium [SystemErrorScreen.tsx](file:///Users/rober/work/CartAI-WEB/src/components/layout/SystemErrorScreen.tsx) que bloquea la interfaz mostrando una pantalla de mantenimiento con luces degradadas en fondo oscuro, botón de reintento manual (con ping rápido sin interceptores) y un sondeo automático (`setInterval`) en segundo plano para recuperar la aplicación automáticamente si el servidor vuelve a responder.
+  - Actualizado [App.tsx](file:///Users/rober/work/CartAI-WEB/src/App.tsx) para interceptar el flujo y renderizar la pantalla de error global en lugar de los enrutadores de la app si hay un fallo de conexión activo.
+  - Añadido el bloque de traducciones `"system"` al final de [es_ES.json](file:///Users/rober/work/CartAI-WEB/src/i18n/locales/es_ES.json) y [en_US.json](file:///Users/rober/work/CartAI-WEB/src/i18n/locales/en_US.json) en estricto orden alfabético.
+* **Configuración del MCP de Linear**:
+  - Configurado correctamente el archivo global del CLI `mcp_config.json` para dar soporte al paquete oficial de `@modelcontextprotocol/server-linear` e inyectar la API key de Linear de forma segura.
 
 ---
 
@@ -99,3 +107,4 @@ The next immediate phase is connecting the client app to the live backend servic
 1. **Verificación de Almacenamiento y Avatar**: Validar en un entorno real la persistencia tras el guardado de avatares vía `/api/storage/files/`.
 2. **Catalog Retrieval**: Replace static mock data inside `productService.ts` with real REST or GraphQL API fetch queries.
 3. **Real-time Analytics**: Wire up dashboard widgets and charts inside `HeroSection.tsx` to read from live backend event streams/data feeds.
+4. **System Settings (Nota Rápida)**: En la futura tarea de creación de un menú de administración (CAR), contemplar la creación de una vista/página para gestionar `systemSettings` generales del sistema (alimentada del backend), comenzando por la configuración del intervalo de reconexión automática (polling) cuando el backend está caído (por defecto en 10s para desarrollo).
