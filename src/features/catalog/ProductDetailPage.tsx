@@ -59,7 +59,21 @@ export function ProductDetailPage() {
               </div>
               <h1 className="text-4xl font-extrabold text-slate-900 mb-4">{product.name}</h1>
               <p className="text-3xl font-bold text-[#e85d04] mb-8">${product.price.toFixed(2)}</p>
-              <p className="text-slate-600 text-lg leading-relaxed mb-10">{product.description}</p>
+              <p className="text-slate-600 text-lg leading-relaxed mb-6">{product.description}</p>
+              
+              {product.attributes && Object.keys(product.attributes).length > 0 && (
+                <div className="mb-10">
+                  <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">{translate("catalog.specifications")}</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {Object.entries(product.attributes).map(([key, value]) => (
+                      <div key={key} className="bg-slate-50 border border-slate-100 rounded-lg p-3 flex flex-col">
+                        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{key}</span>
+                        <span className="text-slate-800 font-medium mt-1">{value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               
               <button
                 onClick={() => addItem(product)}
