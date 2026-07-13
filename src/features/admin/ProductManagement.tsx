@@ -31,7 +31,7 @@ export function ProductManagement() {
       <div className="bg-white rounded-2xl border border-slate-100 shadow-md p-12 flex flex-col justify-center items-center min-h-[300px]">
         <div className="w-10 h-10 border-4 border-(--color-brand-primary) border-t-transparent rounded-full animate-spin"></div>
         <p className="text-slate-500 font-medium text-sm mt-4 animate-pulse">
-          {translate("admin.loadingProducts", "Cargando productos...")}
+          {translate("admin.loadingProducts")}
         </p>
       </div>
     );
@@ -48,7 +48,7 @@ export function ProductManagement() {
           <input
             type="text"
             className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent text-sm bg-slate-50/50"
-            placeholder={translate("admin.searchProductsPlaceholder", "Buscar por nombre o descripción...")}
+            placeholder={translate("admin.searchProductsPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -59,7 +59,7 @@ export function ProductManagement() {
           className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-(--color-brand-primary) text-white font-semibold text-sm rounded-xl hover:bg-(--color-brand-primary-hover) shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          <span>{translate("admin.addProductBtn", "Añadir Producto")}</span>
+          <span>{translate("admin.addProductBtn")}</span>
         </button>
       </div>
 
@@ -68,18 +68,18 @@ export function ProductManagement() {
         {filteredProducts.length === 0 ? (
           <div className="p-12 text-center">
             <PackageOpen className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <p className="text-slate-500 font-medium">{translate("admin.noProductsFound", "No se encontraron productos")}</p>
+            <p className="text-slate-500 font-medium">{translate("admin.noProductsFound")}</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  <th className="py-4 px-6">{translate("admin.colProduct", "Producto")}</th>
-                  <th className="py-4 px-6">{translate("admin.colDescription", "Descripción")}</th>
-                  <th className="py-4 px-6">{translate("admin.colPrice", "Precio")}</th>
-                  <th className="py-4 px-6">{translate("admin.colStock", "Stock")}</th>
-                  <th className="py-4 px-6 text-right">{translate("admin.colActions", "Acciones")}</th>
+                  <th className="py-4 px-6">{translate("admin.colProduct")}</th>
+                  <th className="py-4 px-6">{translate("admin.colDescription")}</th>
+                  <th className="py-4 px-6">{translate("admin.colPrice")}</th>
+                  <th className="py-4 px-6">{translate("admin.colStock")}</th>
+                  <th className="py-4 px-6 text-right">{translate("admin.colActions")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
@@ -122,14 +122,14 @@ export function ProductManagement() {
                         <button
                           onClick={() => openEditModal(product)}
                           className="p-1.5 text-slate-400 hover:text-(--color-brand-primary) hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
-                          title={translate("admin.editProduct", "Editar producto")}
+                          title={translate("admin.editProduct")}
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteProduct(product.id)}
                           className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                          title={translate("admin.deleteProduct", "Eliminar producto")}
+                          title={translate("admin.deleteProduct")}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -150,8 +150,8 @@ export function ProductManagement() {
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
               <h3 className="text-lg font-bold text-slate-900">
                 {showModal === "create"
-                  ? translate("admin.createProductTitle", "Crear Nuevo Producto")
-                  : translate("admin.editProductTitle", "Editar Producto")}
+                  ? translate("admin.createProductTitle")
+                  : translate("admin.editProductTitle")}
               </h3>
               <button onClick={closeModal} className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
                 <X className="w-5 h-5" />
@@ -163,7 +163,7 @@ export function ProductManagement() {
                 {/* Name */}
                 <div>
                   <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                    {translate("admin.formProductNameLabel", "Nombre del Producto")}
+                    {translate("admin.formProductNameLabel")}
                   </label>
                   <input
                     id="name"
@@ -178,7 +178,7 @@ export function ProductManagement() {
                 {/* Description */}
                 <div>
                   <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                    {translate("admin.formDescriptionLabel", "Descripción")}
+                    {translate("admin.formDescriptionLabel")}
                   </label>
                   <textarea
                     id="description"
@@ -194,7 +194,7 @@ export function ProductManagement() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="price" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                      {translate("admin.formPriceLabel", "Precio")}
+                      {translate("admin.formPriceLabel")}
                     </label>
                     <input
                       id="price"
@@ -209,7 +209,7 @@ export function ProductManagement() {
                   </div>
                   <div>
                     <label htmlFor="stock" className="block text-sm font-semibold text-slate-700 mb-1.5">
-                      {translate("admin.formStockLabel", "Stock")}
+                      {translate("admin.formStockLabel")}
                     </label>
                     <input
                       id="stock"
@@ -226,7 +226,7 @@ export function ProductManagement() {
                 {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                    {translate("admin.formImageLabel", "Imágenes del Producto")}
+                    {translate("admin.formImageLabel")}
                   </label>
                   <input
                     type="file"
@@ -248,17 +248,17 @@ export function ProductManagement() {
                           
                           {index === 0 && (
                             <div className="absolute top-0 left-0 bg-(--color-brand-accent) text-white text-[10px] font-bold px-2 py-1 rounded-br-lg z-10 shadow-sm">
-                              {translate("admin.primaryImage", "Principal")}
+                              {translate("admin.primaryImage")}
                             </div>
                           )}
 
                           <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 z-20">
                             {index !== 0 && (
-                              <button type="button" onClick={() => setMainImage(index)} className="p-1.5 bg-white text-slate-800 rounded-md hover:text-(--color-brand-accent) transition-colors cursor-pointer" title={translate("admin.makePrimary", "Hacer principal")}>
+                              <button type="button" onClick={() => setMainImage(index)} className="p-1.5 bg-white text-slate-800 rounded-md hover:text-(--color-brand-accent) transition-colors cursor-pointer" title={translate("admin.makePrimary")}>
                                 <Star className="w-4 h-4" />
                               </button>
                             )}
-                            <button type="button" onClick={() => removeImage(index)} className="p-1.5 bg-white text-red-600 rounded-md hover:bg-red-50 transition-colors cursor-pointer" title={translate("admin.deleteImage", "Eliminar imagen")}>
+                            <button type="button" onClick={() => removeImage(index)} className="p-1.5 bg-white text-red-600 rounded-md hover:bg-red-50 transition-colors cursor-pointer" title={translate("admin.deleteImage")}>
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
@@ -267,9 +267,26 @@ export function ProductManagement() {
                     </div>
                   )}
                   <p className="mt-2 text-xs text-slate-400">
-                    {translate("admin.formImageSpecs", "Opcional. Sube una o varias imágenes en formato JPG o PNG.")}
+                    {translate("admin.formImageSpecs")}
                   </p>
                 </div>
+
+                {/* Attributes (Read-only for now) */}
+                {form.attributes && Object.keys(form.attributes).length > 0 && (
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                      {translate("admin.formAttributesLabel")}
+                    </label>
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 max-h-32 overflow-y-auto space-y-1">
+                      {Object.entries(form.attributes).map(([key, value]) => (
+                        <div key={key} className="text-sm flex justify-between">
+                          <span className="font-semibold text-slate-600">{key}:</span>
+                          <span className="text-slate-800">{value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
@@ -279,7 +296,7 @@ export function ProductManagement() {
                   disabled={isSubmitting}
                   className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800 transition-colors cursor-pointer disabled:opacity-50"
                 >
-                  {translate("admin.cancelBtn", "Cancelar")}
+                  {translate("admin.cancelBtn")}
                 </button>
                 <button
                   type="submit"
@@ -289,7 +306,7 @@ export function ProductManagement() {
                   {isSubmitting && (
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   )}
-                  {translate("admin.saveBtn", "Guardar")}
+                  {translate("admin.saveBtn")}
                 </button>
               </div>
             </form>

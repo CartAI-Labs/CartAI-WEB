@@ -23,6 +23,7 @@ export function useProductManagement() {
     price: 0,
     stock: 0,
     imageFileIds: [] as string[],
+    attributes: undefined as Record<string, string> | undefined,
   };
 
   const [form, setForm] = useState(initialFormState);
@@ -35,7 +36,7 @@ export function useProductManagement() {
       const data = await productService.getProducts();
       setProducts(data);
     } catch (error) {
-      toast.error(translate("admin.errorLoadingProducts", "Error al cargar los productos"));
+      toast.error(translate("admin.errorLoadingProducts"));
     } finally {
       setLoading(false);
     }
@@ -65,6 +66,7 @@ export function useProductManagement() {
       price: product.price,
       stock: product.stock,
       imageFileIds: product.imageFileIds || [],
+      attributes: product.attributes,
     });
     setImages((product.imageFileIds || []).map(id => ({ type: 'existing', id })));
     setShowModal("edit");
@@ -120,7 +122,7 @@ export function useProductManagement() {
   const onCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.description || form.price < 0 || form.stock < 0) {
-      toast.error(translate("admin.errorFillAllFields", "Completa todos los campos obligatorios"));
+      toast.error(translate("admin.errorFillAllFields"));
       return;
     }
 
@@ -134,14 +136,15 @@ export function useProductManagement() {
         price: form.price,
         stock: form.stock,
         imageFileIds: finalImageIds,
+        attributes: form.attributes,
       };
 
       await productService.createProduct(request);
-      toast.success(translate("admin.productCreatedSuccess", "Producto creado con éxito"));
+      toast.success(translate("admin.productCreatedSuccess"));
       closeModal();
       loadProducts();
     } catch (error) {
-      toast.error(translate("admin.errorCreatingProduct", "Error al crear el producto"));
+      toast.error(translate("admin.errorCreatingProduct"));
     } finally {
       setIsSubmitting(false);
     }
@@ -150,7 +153,7 @@ export function useProductManagement() {
   const onEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.id || !form.name || !form.description || form.price < 0 || form.stock < 0) {
-      toast.error(translate("admin.errorFillAllFields", "Completa todos los campos obligatorios"));
+      toast.error(translate("admin.errorFillAllFields"));
       return;
     }
 
@@ -165,28 +168,29 @@ export function useProductManagement() {
         price: form.price,
         stock: form.stock,
         imageFileIds: finalImageIds,
+        attributes: form.attributes,
       };
 
       await productService.updateProduct(request);
-      toast.success(translate("admin.productUpdatedSuccess", "Producto actualizado con éxito"));
+      toast.success(translate("admin.productUpdatedSuccess"));
       closeModal();
       loadProducts();
     } catch (error) {
-      toast.error(translate("admin.errorUpdatingProduct", "Error al actualizar el producto"));
+      toast.error(translate("admin.errorUpdatingProduct"));
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDeleteProduct = async (id: string) => {
-    if (!window.confirm(translate("admin.confirmDeleteProduct", "¿Estás seguro de que deseas eliminar este producto?"))) return;
+    if (!window.confirm(translate("admin.confirmDeleteProduct"))) return;
 
     try {
       await productService.deleteProduct(id);
-      toast.success(translate("admin.productDeletedSuccess", "Producto eliminado con éxito"));
+      toast.success(translate("admin.productDeletedSuccess"));
       loadProducts();
     } catch (error) {
-      toast.error(translate("admin.errorDeletingProduct", "Error al eliminar el producto"));
+      toast.error(translate("admin.errorDeletingProduct"));
     }
   };
 

@@ -36,7 +36,7 @@ export function useRoleManagement() {
       setRoles(fetchedRoles);
     } catch (err) {
       console.error(err);
-      useToastStore.getState().addToast(translate("admin.errorLoadingRoles", "Error al cargar los roles"), "error");
+      useToastStore.getState().addToast(translate("admin.errorLoadingRoles"), "error");
     } finally {
       setLoading(false);
     }
@@ -78,7 +78,7 @@ export function useRoleManagement() {
   const onCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || form.permissions.length === 0) {
-      useToastStore.getState().addToast(translate("admin.errorFillAllFields", "Completa todos los campos obligatorios"), "error");
+      useToastStore.getState().addToast(translate("admin.errorFillAllFields"), "error");
       return;
     }
     try {
@@ -86,24 +86,24 @@ export function useRoleManagement() {
         name: form.name.toUpperCase(),
         permissions: form.permissions,
       });
-      useToastStore.getState().addToast(translate("admin.roleCreatedSuccess", "Rol creado con éxito"), "success");
+      useToastStore.getState().addToast(translate("admin.roleCreatedSuccess"), "success");
       closeModal();
       loadRoles();
     } catch (err) {
       console.error(err);
-      useToastStore.getState().addToast(translate("admin.errorCreatingRole", "Error al crear el rol"), "error");
+      useToastStore.getState().addToast(translate("admin.errorCreatingRole"), "error");
     }
   };
 
   const handleDeleteRole = async (id: string) => {
-    if (!confirm(translate("admin.confirmDeleteRole", "¿Estás seguro de que deseas eliminar este rol?"))) return;
+    if (!confirm(translate("admin.confirmDeleteRole"))) return;
     try {
       await adminService.deleteRole(id);
-      useToastStore.getState().addToast(translate("admin.roleDeletedSuccess", "Rol eliminado con éxito"), "success");
+      useToastStore.getState().addToast(translate("admin.roleDeletedSuccess"), "success");
       loadRoles();
     } catch (err) {
       console.error(err);
-      useToastStore.getState().addToast(translate("admin.errorDeletingRole", "Error al eliminar el rol"), "error");
+      useToastStore.getState().addToast(translate("admin.errorDeletingRole"), "error");
     }
   };
 
