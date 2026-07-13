@@ -36,7 +36,7 @@ export function useUserManagement() {
       setRoles(fetchedRoles);
     } catch (err) {
       console.error(err);
-      useToastStore.getState().addToast(translate("admin.errorLoadingData", "Error al cargar los datos"), "error");
+      useToastStore.getState().addToast(translate("admin.errorLoadingData"), "error");
     } finally {
       setLoading(false);
     }
@@ -92,7 +92,7 @@ export function useUserManagement() {
   const onCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.password || form.roles.length === 0) {
-      useToastStore.getState().addToast(translate("admin.errorFillAllFields", "Completa todos los campos obligatorios"), "error");
+      useToastStore.getState().addToast(translate("admin.errorFillAllFields"), "error");
       return;
     }
     try {
@@ -102,12 +102,12 @@ export function useUserManagement() {
         password: form.password,
         roles: form.roles,
       });
-      useToastStore.getState().addToast(translate("admin.userCreatedSuccess", "Usuario creado con éxito"), "success");
+      useToastStore.getState().addToast(translate("admin.userCreatedSuccess"), "success");
       closeModal();
       loadData();
     } catch (err) {
       console.error(err);
-      useToastStore.getState().addToast(translate("admin.errorCreatingUser", "Error al crear el usuario"), "error");
+      useToastStore.getState().addToast(translate("admin.errorCreatingUser"), "error");
     }
   };
 
@@ -115,7 +115,7 @@ export function useUserManagement() {
     e.preventDefault();
     if (!selectedUser) return;
     if (!form.name || form.roles.length === 0) {
-      useToastStore.getState().addToast(translate("admin.errorFillAllFields", "Completa todos los campos obligatorios"), "error");
+      useToastStore.getState().addToast(translate("admin.errorFillAllFields"), "error");
       return;
     }
     try {
@@ -128,24 +128,24 @@ export function useUserManagement() {
         taxId: selectedUser.taxId,
         preferredLanguage: selectedUser.preferredLanguage,
       });
-      useToastStore.getState().addToast(translate("admin.userUpdatedSuccess", "Usuario actualizado con éxito"), "success");
+      useToastStore.getState().addToast(translate("admin.userUpdatedSuccess"), "success");
       closeModal();
       loadData();
     } catch (err) {
       console.error(err);
-      useToastStore.getState().addToast(translate("admin.errorUpdatingUser", "Error al actualizar el usuario"), "error");
+      useToastStore.getState().addToast(translate("admin.errorUpdatingUser"), "error");
     }
   };
 
   const handleDeleteUser = async (id: string) => {
-    if (!confirm(translate("admin.confirmDeleteUser", "¿Estás seguro de que deseas eliminar este usuario?"))) return;
+    if (!confirm(translate("admin.confirmDeleteUser"))) return;
     try {
       await adminService.deleteUser(id);
-      useToastStore.getState().addToast(translate("admin.userDeletedSuccess", "Usuario eliminado con éxito"), "success");
+      useToastStore.getState().addToast(translate("admin.userDeletedSuccess"), "success");
       loadData();
     } catch (err) {
       console.error(err);
-      useToastStore.getState().addToast(translate("admin.errorDeletingUser", "Error al eliminar el usuario"), "error");
+      useToastStore.getState().addToast(translate("admin.errorDeletingUser"), "error");
     }
   };
 

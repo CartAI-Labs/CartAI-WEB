@@ -16,6 +16,7 @@ import { AdminLayout } from "../features/admin/AdminLayout";
 import { UserManagement } from "../features/admin/UserManagement";
 import { RoleManagement } from "../features/admin/RoleManagement";
 import { ProductManagement } from "../features/admin/ProductManagement";
+import { UploadCatalog } from "../features/catalog/components/UploadCatalog";
 
 export const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
               {
                 path: "products",
                 element: <ProductManagement />,
+              },
+              {
+                path: "upload-catalog",
+                element: <UploadCatalog />,
               },
             ],
           },

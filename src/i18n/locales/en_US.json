@@ -74,7 +74,12 @@
     "searchUsersPlaceholder": "Search by name or email...",
     "userCreatedSuccess": "User created successfully",
     "userDeletedSuccess": "User deleted successfully",
-    "userUpdatedSuccess": "User updated successfully"
+    "userUpdatedSuccess": "User updated successfully",
+    "deleteImage": "Delete image",
+    "formAttributesLabel": "Attributes / Specifications",
+    "makePrimary": "Make primary",
+    "menuUploadCatalog": "Upload Catalog",
+    "primaryImage": "Primary"
   },
   "auth": {
     "createAccountLink": "create a new account",
@@ -113,7 +118,11 @@
     "previous": "Previous",
     "title": "Product Catalog",
     "total": "Total",
-    "zoomImage": "Zoom image"
+    "zoomImage": "Zoom image",
+    "backToCatalog": "Back to catalog",
+    "loading": "Loading catalog...",
+    "noImage": "No image",
+    "specifications": "Specifications"
   },
   "features": {
     "ai": {

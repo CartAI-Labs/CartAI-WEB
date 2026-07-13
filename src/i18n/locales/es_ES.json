@@ -74,7 +74,12 @@
     "searchUsersPlaceholder": "Buscar por nombre o email...",
     "userCreatedSuccess": "Usuario creado con éxito",
     "userDeletedSuccess": "Usuario eliminado con éxito",
-    "userUpdatedSuccess": "Usuario actualizado con éxito"
+    "userUpdatedSuccess": "Usuario actualizado con éxito",
+    "deleteImage": "Eliminar imagen",
+    "formAttributesLabel": "Atributos / Especificaciones",
+    "makePrimary": "Hacer principal",
+    "menuUploadCatalog": "Subir Catálogo",
+    "primaryImage": "Principal"
   },
   "auth": {
     "createAccountLink": "crea una cuenta nueva",
@@ -113,7 +118,11 @@
     "previous": "Anterior",
     "title": "Catálogo de Productos",
     "total": "Total",
-    "zoomImage": "Ampliar imagen"
+    "zoomImage": "Ampliar imagen",
+    "backToCatalog": "Volver al catálogo",
+    "loading": "Cargando catálogo...",
+    "noImage": "Sin imagen",
+    "specifications": "Especificaciones"
   },
   "features": {
     "ai": {

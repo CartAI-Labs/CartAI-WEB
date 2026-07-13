@@ -27,7 +27,7 @@ export function RoleManagement() {
       <div className="bg-white rounded-2xl border border-slate-100 shadow-md p-12 flex flex-col justify-center items-center min-h-[300px]">
         <div className="w-10 h-10 border-4 border-(--color-brand-primary) border-t-transparent rounded-full animate-spin"></div>
         <p className="text-slate-500 font-medium text-sm mt-4 animate-pulse">
-          {translate("admin.loadingRoles", "Cargando roles...")}
+          {translate("admin.loadingRoles")}
         </p>
       </div>
     );
@@ -38,14 +38,14 @@ export function RoleManagement() {
       {/* Top Header Controls */}
       <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-md flex items-center justify-between">
         <h3 className="text-lg font-bold text-slate-800">
-          {translate("admin.rolesTitle", "Roles del Sistema")}
+          {translate("admin.rolesTitle")}
         </h3>
         <button
           onClick={openCreateModal}
           className="flex items-center gap-2 px-5 py-2.5 bg-(--color-brand-primary) text-white font-semibold text-sm rounded-xl hover:bg-(--color-brand-primary-hover) shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          <span>{translate("admin.addRoleBtn", "Añadir Rol")}</span>
+          <span>{translate("admin.addRoleBtn")}</span>
         </button>
       </div>
 
@@ -54,7 +54,7 @@ export function RoleManagement() {
         {roles.length === 0 ? (
           <div className="bg-white rounded-2xl border border-slate-100 shadow-md p-12 text-center col-span-2">
             <ShieldAlert className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <p className="text-slate-500 font-medium">{translate("admin.noRolesFound", "No se encontraron roles")}</p>
+            <p className="text-slate-500 font-medium">{translate("admin.noRolesFound")}</p>
           </div>
         ) : (
           roles.map((role) => (
@@ -68,7 +68,7 @@ export function RoleManagement() {
                   <button
                     onClick={() => handleDeleteRole(role.id)}
                     className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                    title={translate("admin.deleteRole", "Eliminar rol")}
+                    title={translate("admin.deleteRole")}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -76,7 +76,7 @@ export function RoleManagement() {
 
                 <div className="space-y-2">
                   <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                    {translate("admin.permissionsLabel", "Permisos Asociados")}
+                    {translate("admin.permissionsLabel")}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {role.permissions && role.permissions.length > 0 ? (
@@ -90,7 +90,7 @@ export function RoleManagement() {
                       ))
                     ) : (
                       <span className="text-xs text-slate-400 italic">
-                        {translate("admin.noPermissions", "Sin permisos")}
+                        {translate("admin.noPermissions")}
                       </span>
                     )}
                   </div>
@@ -107,7 +107,7 @@ export function RoleManagement() {
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
               <h3 className="text-lg font-bold text-slate-900">
-                {translate("admin.createRoleTitle", "Crear Nuevo Rol")}
+                {translate("admin.createRoleTitle")}
               </h3>
               <button onClick={closeModal} className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
                 <X className="w-5 h-5" />
@@ -119,7 +119,7 @@ export function RoleManagement() {
                 {/* Role Name */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                    {translate("admin.formRoleNameLabel", "Nombre del Rol (ej. GESTOR)")}
+                    {translate("admin.formRoleNameLabel")}
                   </label>
                   <input
                     type="text"
@@ -134,7 +134,7 @@ export function RoleManagement() {
                 {/* Permissions checkboxes */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    {translate("admin.formPermissionsLabel", "Permisos")}
+                    {translate("admin.formPermissionsLabel")}
                   </label>
                   <div className="space-y-2 border border-slate-100 rounded-xl p-3 bg-slate-50/30">
                     {SYSTEM_PERMISSIONS.map((perm) => (
@@ -158,13 +158,13 @@ export function RoleManagement() {
                   onClick={closeModal}
                   className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800 transition-colors cursor-pointer"
                 >
-                  {translate("admin.cancelBtn", "Cancelar")}
+                  {translate("admin.cancelBtn")}
                 </button>
                 <button
                   type="submit"
                   className="px-5 py-2 bg-(--color-brand-primary) text-white text-sm font-semibold rounded-xl hover:bg-(--color-brand-primary-hover) shadow-md hover:shadow-lg transition-all cursor-pointer"
                 >
-                  {translate("admin.saveBtn", "Guardar")}
+                  {translate("admin.saveBtn")}
                 </button>
               </div>
             </form>

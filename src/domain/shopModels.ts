@@ -10,6 +10,7 @@ export interface Product {
   price: number;
   stock: number;
   imageFileIds: string[];
+  attributes?: Record<string, string>;
 }
 
 export interface CartItem {
@@ -23,6 +24,7 @@ export interface CreateProductRequest {
   price: number;
   stock: number;
   imageFileIds: string[];
+  attributes?: Record<string, string>;
 }
 
 export interface UpdateProductRequest {
@@ -32,4 +34,5 @@ export interface UpdateProductRequest {
   price: number;
   stock: number;
   imageFileIds: string[];
+  attributes?: Record<string, string>;
 }

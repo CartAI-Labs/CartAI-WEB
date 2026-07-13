@@ -31,7 +31,7 @@ export function UserManagement() {
       <div className="bg-white rounded-2xl border border-slate-100 shadow-md p-12 flex flex-col justify-center items-center min-h-[300px]">
         <div className="w-10 h-10 border-4 border-(--color-brand-primary) border-t-transparent rounded-full animate-spin"></div>
         <p className="text-slate-500 font-medium text-sm mt-4 animate-pulse">
-          {translate("admin.loadingUsers", "Cargando usuarios...")}
+          {translate("admin.loadingUsers")}
         </p>
       </div>
     );
@@ -48,7 +48,7 @@ export function UserManagement() {
           <input
             type="text"
             className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-(--color-brand-accent) focus:border-transparent text-sm bg-slate-50/50"
-            placeholder={translate("admin.searchUsersPlaceholder", "Buscar por nombre o email...")}
+            placeholder={translate("admin.searchUsersPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -59,7 +59,7 @@ export function UserManagement() {
           className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-(--color-brand-primary) text-white font-semibold text-sm rounded-xl hover:bg-(--color-brand-primary-hover) shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer"
         >
           <UserPlus className="w-4 h-4" />
-          <span>{translate("admin.addUserBtn", "Añadir Usuario")}</span>
+          <span>{translate("admin.addUserBtn")}</span>
         </button>
       </div>
 
@@ -68,17 +68,17 @@ export function UserManagement() {
         {filteredUsers.length === 0 ? (
           <div className="p-12 text-center">
             <ShieldAlert className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <p className="text-slate-500 font-medium">{translate("admin.noUsersFound", "No se encontraron usuarios")}</p>
+            <p className="text-slate-500 font-medium">{translate("admin.noUsersFound")}</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  <th className="py-4 px-6">{translate("admin.colUser", "Usuario")}</th>
-                  <th className="py-4 px-6">{translate("admin.colEmail", "Email")}</th>
-                  <th className="py-4 px-6">{translate("admin.colRoles", "Roles")}</th>
-                  <th className="py-4 px-6 text-right">{translate("admin.colActions", "Acciones")}</th>
+                  <th className="py-4 px-6">{translate("admin.colUser")}</th>
+                  <th className="py-4 px-6">{translate("admin.colEmail")}</th>
+                  <th className="py-4 px-6">{translate("admin.colRoles")}</th>
+                  <th className="py-4 px-6 text-right">{translate("admin.colActions")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
@@ -118,7 +118,7 @@ export function UserManagement() {
                           ))
                         ) : (
                           <span className="text-xs text-slate-400 italic">
-                            {translate("admin.noRoles", "Sin roles")}
+                            {translate("admin.noRoles")}
                           </span>
                         )}
                       </div>
@@ -128,14 +128,14 @@ export function UserManagement() {
                         <button
                           onClick={() => openEditModal(user)}
                           className="p-1.5 text-slate-400 hover:text-(--color-brand-primary) hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
-                          title={translate("admin.editUser", "Editar usuario")}
+                          title={translate("admin.editUser")}
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteUser(user.id)}
                           className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                          title={translate("admin.deleteUser", "Eliminar usuario")}
+                          title={translate("admin.deleteUser")}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -156,8 +156,8 @@ export function UserManagement() {
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
               <h3 className="text-lg font-bold text-slate-900">
                 {showModal === "create"
-                  ? translate("admin.createUserTitle", "Crear Nuevo Usuario")
-                  : translate("admin.editUserTitle", "Editar Usuario")}
+                  ? translate("admin.createUserTitle")
+                  : translate("admin.editUserTitle")}
               </h3>
               <button onClick={closeModal} className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
                 <X className="w-5 h-5" />
@@ -169,7 +169,7 @@ export function UserManagement() {
                 {/* Name */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                    {translate("admin.formNameLabel", "Nombre Completo")}
+                    {translate("admin.formNameLabel")}
                   </label>
                   <input
                     type="text"
@@ -184,7 +184,7 @@ export function UserManagement() {
                 {showModal === "create" && (
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                      {translate("admin.formEmailLabel", "Correo Electrónico")}
+                      {translate("admin.formEmailLabel")}
                     </label>
                     <input
                       type="email"
@@ -200,7 +200,7 @@ export function UserManagement() {
                 {showModal === "create" && (
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-                      {translate("admin.formPasswordLabel", "Contraseña")}
+                      {translate("admin.formPasswordLabel")}
                     </label>
                     <input
                       type="password"
@@ -215,7 +215,7 @@ export function UserManagement() {
                 {/* Roles checkboxes */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    {translate("admin.formRolesLabel", "Roles")}
+                    {translate("admin.formRolesLabel")}
                   </label>
                   <div className="space-y-2 border border-slate-100 rounded-xl p-3 bg-slate-50/30">
                     {roles.map((role) => (
@@ -244,13 +244,13 @@ export function UserManagement() {
                   onClick={closeModal}
                   className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800 transition-colors cursor-pointer"
                 >
-                  {translate("admin.cancelBtn", "Cancelar")}
+                  {translate("admin.cancelBtn")}
                 </button>
                 <button
                   type="submit"
                   className="px-5 py-2 bg-(--color-brand-primary) text-white text-sm font-semibold rounded-xl hover:bg-(--color-brand-primary-hover) shadow-md hover:shadow-lg transition-all cursor-pointer"
                 >
-                  {translate("admin.saveBtn", "Guardar")}
+                  {translate("admin.saveBtn")}
                 </button>
               </div>
             </form>
